@@ -258,12 +258,6 @@ _T = {
     "afm.titulek": ("{reg}, {povrch}, citlivost {mode}",
                     "{reg}, {povrch}, sensitivity {mode}"),
     "afm.titulek_ch": ("{povrch}, bez zpětné vazby", "{povrch}, feedback off"),
-    "afm.nekalibrovano": (
-        "Parametry hrotu (U0, Ra, K_P) nejsou kalibrované - jde o ilustrativní "
-        "hodnoty typického qPlus senzoru; změřený je jen šum.",
-        "Tip parameters (U0, Ra, K_P) are not calibrated - they are "
-        "illustrative values of a typical qPlus sensor; only the noise is "
-        "measured."),
     "afm.co_je_df": ("Co je vlastně Δf", "What Δf actually is"),
     "afm.rez_popis": (
         "Rezonanční křivka v bodě skenu, který vybereš posuvníkem (▶ přehraje "

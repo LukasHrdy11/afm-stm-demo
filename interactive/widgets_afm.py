@@ -6,8 +6,8 @@ veličina.
 
 Preset se jmenuje "typický qPlus", ne "reálný přístroj": kalibrace
 parametrů hrotu se nepovedla a změřený je tu jen šum (viz
-afm_sim/measured.py, kde je u každé konstanty uvedeno, odkud je). Panel to
-u sebe píše (texty.py, klíč afm.nekalibrovano).
+afm_sim/measured.py, kde je u každé konstanty uvedeno, odkud je). V panelu
+to říká legenda parametrů (původ "nekalibrováno, ilustrativní").
 """
 
 import ipywidgets as w
@@ -359,8 +359,7 @@ def build_afm_panel(jazyk="cs"):
     prekresli()
 
     panel = w.VBox([
-        w.HTML(f"<h3>{T('afm.nadpis')}</h3>"
-               f"<div style='color:#555'><i>{T('afm.nekalibrovano')}</i></div>"),
+        w.HTML(f"<h3>{T('afm.nadpis')}</h3>"),
         w.HBox([vlevo, vpravo], layout=w.Layout(justify_content="flex-start")),
         hlaseni,
         zalozky,
