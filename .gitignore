@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Výstupy simulace (grafy se generují, necommitují)
+export/
+
+# Sestavená webová verze (build_web.py / GitHub Action)
+_web/

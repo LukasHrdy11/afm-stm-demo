@@ -1,0 +1,61 @@
+# Sestaví webovou verzi nástroje (JupyterLite + Voici) a nasadí ji na GitHub Pages.
+# Build a static web version of the tool (JupyterLite + Voici) and deploy it to GitHub Pages.
+#
+# Jednorázově v repu: Settings -> Pages -> Source: "GitHub Actions".
+# One-time setup in the repo: Settings -> Pages -> Source: "GitHub Actions".
+#
+# Zdroj: web/deploy.yml v privátním repu, sem ho kopíruje publish.py.
+name: Deploy web version
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build tools (versions tested with build_web.py)
+        run: |
+          pip install voici-core==0.10.0 jupyterlite-core==0.7.0 \
+            jupyterlite-pyodide-kernel==0.7.0 jupyterlab_widgets==3.0.17 \
+            ipywidgets==8.1.9
+      - name: Run tests
+        run: |
+          pip install numpy matplotlib
+          # Skripty vypisují [OK]/[SELHALO]; build se zastaví při jakémkoli SELHALO.
+          # The scripts print [OK]/[SELHALO]; the build stops on any failure.
+          for t in test_interactive test_texty test_grafy test_kombinovany test_measured; do
+            out=$(PYTHONPATH=. MPLBACKEND=Agg python tests/$t.py 2>&1) || { echo "$out"; exit 1; }
+            echo "$t: $(echo "$out" | tail -1)"
+            if echo "$out" | grep -q "SELHALO\]"; then echo "$out"; exit 1; fi
+          done
+      - name: Build web version
+        run: python build_web.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
